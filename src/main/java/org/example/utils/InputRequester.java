@@ -171,22 +171,22 @@ public class InputRequester {
         return requestAnIndexFrom(optionsList, prompt, "Número de opción inválida. Inténtalo de nuevo", null);
     }
 
-    public static int requestAnIndexFrom(List<String> optionsList, String prompt, Function<String, String>promptFactory) {
-        return requestAnIndexFrom(optionsList, prompt, "Número de opcion inválida. Inténtalo de nuevo", promptFactory);
+    public static int requestAnIndexFrom(List<String> optionsList, String prompt, ExtendedPromptFactory extendedPromptFactory) {
+        return requestAnIndexFrom(optionsList, prompt, "Número de opcion inválida. Inténtalo de nuevo", extendedPromptFactory);
     }
 
-    public static int requestAnIndexFrom(List<String> optionsList, String prompt, String invalidInputMessage, Function<String, String>promptFactory) {
+    public static int requestAnIndexFrom(List<String> optionsList, String prompt, String invalidInputMessage, ExtendedPromptFactory extendedPromptFactory) {
         var formattedOptions = new ArrayList<String>();
         for (int i = 0; i < optionsList.size(); i++) {
             String option = optionsList.get(i);
             var listedOption = String.format("%d. %s", i + 1, option);
             formattedOptions.add(listedOption);
         }
-        String fullPrompt = prompt + "\n" + String.join("\n", formattedOptions);
-        if (promptFactory != null) fullPrompt = promptFactory.apply(fullPrompt);
+        String formattedPromptWithOptions = prompt + "\n" + String.join("\n", formattedOptions);
+        if (extendedPromptFactory != null) formattedPromptWithOptions = extendedPromptFactory.extend(formattedPromptWithOptions);
 
         while (true) {
-            var chosenOption = requestInteger(fullPrompt);
+            var chosenOption = requestInteger(formattedPromptWithOptions);
             if (chosenOption.isEmpty()) return -1;
 
             boolean isValidOption = chosenOption.get() > 0 && chosenOption.get() <= optionsList.size();
