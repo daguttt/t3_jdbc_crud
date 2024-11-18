@@ -5,6 +5,7 @@ import org.example.Menu;
 import org.example.commands.interfaces.MenuCommand;
 import org.example.controllers.ProjectsController;
 import org.example.entities.Project;
+import org.example.enums.Roles;
 import org.example.utils.InputRequester;
 
 import javax.swing.*;
@@ -22,10 +23,26 @@ public class CreateProjectCommand implements MenuCommand {
 
     @Override
     public void execute(Menu menu) {
+        if (appState.getUser().getRole() == Roles.VOLUNTEER) {
+            JOptionPane.showMessageDialog(null, "No tienes permiso para crear proyectos.");
+            return;
+        }
+
         String title = InputRequester.requestString("Ingresa el titulo del proyecto");
         String description = InputRequester.requestString("Ingresa la descripción del proyecto");
-        LocalDate startDate = InputRequester.requestLocalDate("Ingresa la fecha de inicio del proyecto").orElseThrow();
-        LocalDate endDate = InputRequester.requestLocalDate("Ingresa la fecha de fin del proyecto").orElseThrow();
+        LocalDate startDate = InputRequester.requestLocalDate("Ingresa la fecha de inicio del proyecto (En el futuro o hoy)").orElseThrow();
+
+        if (startDate.isBefore(LocalDate.now())) {
+            JOptionPane.showMessageDialog(null, "La fecha de inicio del proyecto debe ser en el futuro o hoy.");
+            return;
+        }
+
+        LocalDate endDate = InputRequester.requestLocalDate(String.format("Ingresa la fecha de fin del proyecto (Después de la fecha de inicio '%TD')", startDate)).orElseThrow();
+
+        if (endDate.isBefore(startDate)) {
+            JOptionPane.showMessageDialog(null, "La fecha de fin del proyecto debe ser posterior a la fecha de inicio.");
+            return;
+        }
 
         Project baseProject = new Project(
                 title,
