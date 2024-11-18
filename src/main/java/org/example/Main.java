@@ -3,10 +3,7 @@ package org.example;
 import org.example.controllers.UsersController;
 import org.example.models.UserModel;
 import org.example.persistence.Database;
-import org.example.utils.InputRequester;
 
-import javax.swing.*;
-import java.util.List;
 import java.util.Objects;
 
 public class Main {
@@ -42,14 +39,9 @@ public class Main {
                 appState,
                 usersController
         );
-        var authMenu = new Menu(menuOptionsFactory.getAuthMenuCommands());
-        var mainMenu = new Menu(menuOptionsFactory.getMainMenuCommands());
+        Menu authMenu = new MenuImpl(menuOptionsFactory.getAuthMenuCommands());
+        Menu mainMenu = new MenuImpl(menuOptionsFactory.getMainMenuCommands());
 
-        while (Objects.equals(appState.getStatus(), AppStatus.RUNNING)) {
-            if (appState.getUser() == null)
-                authMenu.display();
-            mainMenu.display();
-        }
-
+        authMenu.subMenu(mainMenu).open();
     }
 }

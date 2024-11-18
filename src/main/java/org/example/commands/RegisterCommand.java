@@ -1,6 +1,7 @@
 package org.example.commands;
 
 import org.example.AppState;
+import org.example.Menu;
 import org.example.commands.interfaces.MenuCommand;
 import org.example.controllers.UsersController;
 import org.example.entities.User;
@@ -21,7 +22,7 @@ public class RegisterCommand implements MenuCommand {
     }
 
     @Override
-    public void execute() {
+    public void execute(Menu menu) {
         String name = InputRequester.requestString("Ingresa tu nombre");
         String email = InputRequester.requestString("Ingresa tu correo electrónico");
         String password = InputRequester.requestString("Ingresa tu contraseña");

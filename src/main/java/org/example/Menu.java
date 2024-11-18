@@ -1,50 +1,60 @@
 package org.example;
 
-import org.example.commands.RegisterCommand;
-import org.example.utils.InputRequester;
-
+import java.util.ArrayList;
 import java.util.List;
 
-public class Menu {
-    private static final String DEFAULT_TITLE = "Menu";
-    private static final String DEFAULT_DESCRIPTION = "Ingresa una opción:";
-    private static final String FOOTER = "************************************************";
+public abstract class Menu {
 
-    private final List<MenuOption> menuOptions;
-    private String title;
-    private String description;
+    public enum MenuStatus {
+        OPEN,
+        CLOSED
+    }
+
+    protected static final String DEFAULT_TITLE = "Menu";
+    protected static String FOOTER = "************************************************";
+
+    protected final List<Menu> subMenus;
+    protected final List<MenuOption> menuOptions;
+    protected final String title;
+    protected MenuStatus status;
 
     public Menu(List<MenuOption> menuOptions) {
-        this(menuOptions, DEFAULT_TITLE, DEFAULT_DESCRIPTION);
+        this(menuOptions, DEFAULT_TITLE);
     }
 
-    public Menu(List<MenuOption> menuOptions, String title, String description) {
+
+    public Menu(List<MenuOption> menuOptions, String title) {
         this.menuOptions = menuOptions;
         this.title = title;
-        this.description = description;
+
+        this.subMenus = new ArrayList<>();
     }
 
-    public void display() {
-        List<String> commandOptionsAsStringList = this.menuOptions.stream().map(MenuOption::text).toList();
-        System.out.printf("commandOptionsAsStringList: %s", commandOptionsAsStringList);
-        int choice = InputRequester.requestAnIndexFrom(commandOptionsAsStringList, "Ingresa una opcion:",
-                (basePrompt) -> String.format("""
-                    %s
-                    
-                    %s
-
-                    %s
-                    """, this.getFormattedTitle(), basePrompt, FOOTER));
-
-        this.menuOptions.get(choice).command().execute();
-
+    public void setStatus(MenuStatus status) {
     }
 
-    private String getFormattedTitle() {
-        final int evenTitleLength = this.title.length() % 2 == 0 ? this.title.length() : this.title.length() + 1;
+    public void open() {
+        if (this.status == MenuStatus.CLOSED) return;
+
+        for (Menu subMenu : this.subMenus) {
+            subMenu.open();
+        }
+    }
+
+    public void close() {
+        this.status = MenuStatus.CLOSED;
+    }
+
+    protected Menu subMenu(Menu subMenu) {
+        this.subMenus.add(subMenu);
+        return this;
+    }
+
+    protected String getFormattedTitle(String baseTitle) {
+        final int evenTitleLength = baseTitle.length() % 2 == 0 ? baseTitle.length() : baseTitle.length() + 1;
         final int maxLineLength = FOOTER.length();
         final int spacesAroundTitle = 2;
         final int paddingLength = (maxLineLength - evenTitleLength - spacesAroundTitle) / 2;
-        return String.format("%s %s %s", "*".repeat(paddingLength), this.title, "*".repeat(paddingLength));
+        return String.format("%s %s %s", "*".repeat(paddingLength), baseTitle, "*".repeat(paddingLength));
     }
 }

@@ -1,6 +1,7 @@
 package org.example.commands;
 
 import org.example.AppState;
+import org.example.Menu;
 import org.example.commands.interfaces.MenuCommand;
 
 public class LogoutCommand implements MenuCommand {
@@ -11,8 +12,7 @@ public class LogoutCommand implements MenuCommand {
     }
 
     @Override
-    public void execute() {
+    public void execute(Menu menu) {
         appState.setUser(null);
     }
-
 }

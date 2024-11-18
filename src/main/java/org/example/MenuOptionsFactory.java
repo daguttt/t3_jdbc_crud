@@ -1,5 +1,6 @@
 package org.example;
 
+import org.example.commands.CloseCommand;
 import org.example.commands.LoginCommand;
 import org.example.commands.LogoutCommand;
 import org.example.commands.RegisterCommand;
@@ -21,13 +22,15 @@ public class MenuOptionsFactory {
     public List<MenuOption> getAuthMenuCommands() {
         return List.of(
                 new MenuOption("Iniciar sesión.", new LoginCommand(appState, this.usersController)),
-                new MenuOption("Registrarse", new RegisterCommand(appState, this.usersController))
+                new MenuOption("Registrarse", new RegisterCommand(appState, this.usersController)),
+                new MenuOption("Salir", new CloseCommand())
         );
     }
 
     public List<MenuOption> getMainMenuCommands() {
         return List.of(
-                new MenuOption("Cerrar sesión", new LogoutCommand(appState))
+                new MenuOption("Cerrar sesión", new LogoutCommand(appState)),
+                new MenuOption("Salir", new CloseCommand())
         );
     }
 }
