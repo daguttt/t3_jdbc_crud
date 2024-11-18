@@ -2,7 +2,6 @@ package org.example;
 
 import org.example.utils.InputRequester;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class MenuImpl extends Menu {

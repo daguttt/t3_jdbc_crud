@@ -1,10 +1,8 @@
 package org.example;
 
 import org.example.controllers.UsersController;
-import org.example.models.UserModel;
+import org.example.models.UsersModel;
 import org.example.persistence.Database;
-
-import java.util.Objects;
 
 public class Main {
     public static void main(String[] args) {
@@ -24,11 +22,11 @@ public class Main {
         database.testConnection();
 
         // Models
-        UserModel userModel = new UserModel(database);
+        UsersModel usersModel = new UsersModel(database);
 
 
         // Controller
-        UsersController usersController = new UsersController(userModel);
+        UsersController usersController = new UsersController(usersModel);
 
 
         // -****************************

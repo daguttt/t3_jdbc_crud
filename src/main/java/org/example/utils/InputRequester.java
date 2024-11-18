@@ -47,6 +47,13 @@ public class InputRequester {
         return requestLocalDate(prompt, invalidInputMessage, false);
     }
 
+    /**
+     * Request a LocalDate from the user.
+     * @param prompt The prompt to show to the user.
+     * @param invalidInputMessage The message to show to the user if the input is invalid.
+     * @param allowEmpty Whether to allow empty input (i.e. the user can cancel).
+     * @return An {@link Optional} containing the entered {@link LocalDate} if valid, or an empty {@link Optional} if empty input is allowed and the user cancelled.
+     */
     public static Optional<LocalDate> requestLocalDate(String prompt, String invalidInputMessage, boolean allowEmpty) {
         while (true) {
             String inputLocalDate = requestString(prompt + "\nFormat: YYYY-MM-DD", allowEmpty);

@@ -7,10 +7,10 @@ import org.example.persistence.Database;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public class UserModel {
+public class UsersModel {
     private final Database database;
 
-    public UserModel(Database database) {
+    public UsersModel(Database database) {
         this.database = database;
     }
 
@@ -28,7 +28,7 @@ public class UserModel {
             var result = statement.executeQuery();
             if (result.next()) {
                 loggedUser = new User(
-                        result.getLong("id"),
+                        result.getInt("id"),
                         result.getString("name"),
                         result.getString("email"),
                         result.getString("password"),
@@ -63,8 +63,8 @@ public class UserModel {
 
             if (resultSet.next()) {
                 int givenUserId = resultSet.getInt(1);
-                baseUser.setId((long) givenUserId);
-            } else throw new SQLException("Couldn't create enrollment");
+                baseUser.setId(givenUserId);
+            } else throw new SQLException("Couldn't create user");
 
             resultSet.close();
 

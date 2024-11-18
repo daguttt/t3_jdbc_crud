@@ -3,7 +3,7 @@ package org.example.entities;
 import org.example.enums.Roles;
 
 public class User {
-    private Long id;
+    private int id;
     private String name;
     private String email;
     private String password;
@@ -25,7 +25,7 @@ public class User {
     }
 
 
-    public User(Long id, String name, String email, String password, Roles role) {
+    public User(int id, String name, String email, String password, Roles role) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -33,7 +33,7 @@ public class User {
         this.role = role;
     }
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
@@ -53,7 +53,7 @@ public class User {
         return role;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
