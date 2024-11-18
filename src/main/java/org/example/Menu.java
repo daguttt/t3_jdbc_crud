@@ -1,56 +1,85 @@
 package org.example;
 
-import java.util.ArrayList;
+import org.example.utils.InputRequester;
+
 import java.util.List;
 
-public abstract class Menu {
+public class Menu {
 
     public enum MenuStatus {
         OPEN,
         CLOSED
     }
 
-    protected static final String DEFAULT_TITLE = "Menu";
-    protected static String FOOTER = "************************************************";
+    private static final String DEFAULT_TITLE = "Menu";
+    private static final String FOOTER = "************************************************";
 
-    protected final List<Menu> subMenus;
-    protected final List<MenuOption> menuOptions;
-    protected final String title;
-    protected MenuStatus status;
+    private final List<MenuOption> menuOptions;
+    private final String title;
+    private final String basePrompt;
+    private MenuStatus status;
+    private Menu subMenu;
+    private Menu parentMenu;
+
 
     public Menu(List<MenuOption> menuOptions) {
-        this(menuOptions, DEFAULT_TITLE);
+        this(menuOptions, DEFAULT_TITLE, "Ingresa una opcion:");
     }
 
 
-    public Menu(List<MenuOption> menuOptions, String title) {
+    public Menu(List<MenuOption> menuOptions, String title, String basePrompt) {
         this.menuOptions = menuOptions;
         this.title = title;
-
-        this.subMenus = new ArrayList<>();
-    }
-
-    public void setStatus(MenuStatus status) {
+        this.basePrompt = basePrompt;
+        this.status = MenuStatus.CLOSED;
     }
 
     public void open() {
-        if (this.status == MenuStatus.CLOSED) return;
+        if (this.isSubMenu() && this.parentMenu.isClosed()) return;
 
-        for (Menu subMenu : this.subMenus) {
-            subMenu.open();
+        this.status = MenuStatus.OPEN;
+
+        while (this.status == MenuStatus.OPEN) {
+            List<String> commandOptionsAsStringList = this.menuOptions.stream().map(MenuOption::text).toList();
+            int choice = InputRequester.requestAnIndexFrom(
+                    commandOptionsAsStringList,
+                    this.basePrompt,
+                    (formattedPromptWithOptions) -> String.format("""
+                        %s
+                        
+                        %s
+    
+                        %s
+                        """, this.getFormattedTitle(this.title), formattedPromptWithOptions, FOOTER)
+            );
+
+            this.menuOptions.get(choice).command().execute(this);
+
+            if (this.subMenu != null) this.subMenu.open();
         }
+
     }
 
     public void close() {
         this.status = MenuStatus.CLOSED;
+        if (this.subMenu != null) this.subMenu.close();
     }
 
-    protected Menu subMenu(Menu subMenu) {
-        this.subMenus.add(subMenu);
+    public Menu subMenu(Menu subMenu) {
+        this.subMenu = subMenu;
+        this.subMenu.parentMenu = this;
         return this;
     }
 
-    protected String getFormattedTitle(String baseTitle) {
+    public boolean isClosed() {
+        return this.status == MenuStatus.CLOSED;
+    }
+
+    public boolean isSubMenu() {
+        return this.parentMenu != null;
+    }
+
+    private String getFormattedTitle(String baseTitle) {
         final int evenTitleLength = baseTitle.length() % 2 == 0 ? baseTitle.length() : baseTitle.length() + 1;
         final int maxLineLength = FOOTER.length();
         final int spacesAroundTitle = 2;

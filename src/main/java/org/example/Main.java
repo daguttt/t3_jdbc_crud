@@ -37,8 +37,8 @@ public class Main {
                 appState,
                 usersController
         );
-        Menu authMenu = new MenuImpl(menuOptionsFactory.getAuthMenuCommands());
-        Menu mainMenu = new MenuImpl(menuOptionsFactory.getMainMenuCommands());
+        Menu authMenu = new Menu(menuOptionsFactory.getAuthMenuCommands());
+        Menu mainMenu = new Menu(menuOptionsFactory.getMainMenuCommands());
 
         authMenu.subMenu(mainMenu).open();
     }
