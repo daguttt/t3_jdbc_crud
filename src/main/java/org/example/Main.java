@@ -1,7 +1,9 @@
 package org.example;
 
+import org.example.controllers.InscriptionsController;
 import org.example.controllers.ProjectsController;
 import org.example.controllers.UsersController;
+import org.example.models.InscriptionsModel;
 import org.example.models.ProjectsModel;
 import org.example.models.UsersModel;
 import org.example.persistence.Database;
@@ -26,11 +28,13 @@ public class Main {
         // Models
         UsersModel usersModel = new UsersModel(database);
         ProjectsModel projectsModel = new ProjectsModel(database);
+        InscriptionsModel inscriptionsModel = new InscriptionsModel(database);
 
 
         // Controller
         UsersController usersController = new UsersController(usersModel);
         ProjectsController projectsController = new ProjectsController(projectsModel);
+        InscriptionsController inscriptionsController = new InscriptionsController(inscriptionsModel);
 
 
         // -****************************
@@ -40,7 +44,9 @@ public class Main {
         var menuOptionsFactory = new MenuOptionsFactory(
                 appState,
                 usersController,
-                projectsController
+                projectsController,
+                inscriptionsController
+
         );
         Menu authMenu = new Menu(menuOptionsFactory.getAuthMenuCommands());
         Menu mainMenu = new Menu(menuOptionsFactory.getMainMenuCommands());
