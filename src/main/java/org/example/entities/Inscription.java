@@ -40,4 +40,13 @@ public class Inscription {
     public void setId(Integer id) {
         this.id = id;
     }
+
+    @Override
+    public String toString() {
+        return String.format("""
+                ID: %d
+                Fecha inscripción: %s
+                Proyecto: %s
+                """, this.id, this.project.getTitle(), this.date);
+    }
 }

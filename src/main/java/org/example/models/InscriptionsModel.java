@@ -1,11 +1,15 @@
 package org.example.models;
 
 import org.example.entities.Inscription;
+import org.example.entities.Project;
+import org.example.entities.User;
 import org.example.persistence.Database;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class InscriptionsModel {
     private final Database database;
@@ -48,4 +52,43 @@ public class InscriptionsModel {
         }
     }
 
+    public List<Inscription> findAll(User user) {
+        var sql = """
+                SELECT i.id, p.title as project_title, i.date\s
+                FROM inscriptions as i\s
+                INNER JOIN projects as p\s
+                ON i.project_id = p.id
+                WHERE i.user_id = ?;
+                """;
+
+        var inscriptionList = new ArrayList<Inscription>();
+
+        try (
+                var connection = database.openConnection();
+                var statement = connection.prepareStatement(sql))
+        {
+            statement.setInt(1, user.getId());
+
+            var resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                var id = resultSet.getInt("id");
+                var projectTitle = resultSet.getString("project_title");
+                var date = resultSet.getDate("date");
+
+                var project = new Project();
+                project.setTitle(projectTitle);
+
+                var inscription = new Inscription(id, user, project, date);
+                inscriptionList.add(inscription);
+            }
+            resultSet.close();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return inscriptionList.stream().toList();
+
+    }
 }
