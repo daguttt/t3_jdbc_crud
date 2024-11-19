@@ -20,6 +20,7 @@ public class Menu {
     private MenuStatus status;
     private Menu subMenu;
     private Menu parentMenu;
+    private boolean canOpenSubMenu;
 
 
     public Menu(List<MenuOption> menuOptions) {
@@ -32,6 +33,11 @@ public class Menu {
         this.title = title;
         this.basePrompt = basePrompt;
         this.status = MenuStatus.CLOSED;
+        this.canOpenSubMenu = true;
+    }
+
+    public void setCanOpenSubMenu(boolean canOpenSubMenu) {
+        this.canOpenSubMenu = canOpenSubMenu;
     }
 
     public void open() {
@@ -55,7 +61,7 @@ public class Menu {
 
             this.menuOptions.get(choice).command().execute(this);
 
-            if (this.subMenu != null) this.subMenu.open();
+            if (this.subMenu != null && this.canOpenSubMenu) this.subMenu.open();
         }
 
     }
@@ -77,6 +83,15 @@ public class Menu {
 
     public boolean isSubMenu() {
         return this.parentMenu != null;
+    }
+
+    private void executeSelectedCommand(int choice) {
+        MenuCommand commandToExecute = this.menuOptions.get(choice).command();
+        if (this.isSubMenu() && commandToExecute.getClass() == CloseAllCommand.class) {
+            commandToExecute.execute(this.parentMenu);
+        } else {
+            commandToExecute.execute(this);
+        }
     }
 
     private String getFormattedTitle(String baseTitle) {
