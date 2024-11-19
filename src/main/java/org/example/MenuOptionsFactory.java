@@ -30,6 +30,7 @@ public class MenuOptionsFactory {
     public List<MenuOption> getMainMenuCommands() {
         return List.of(
                 new MenuOption("Crear proyecto", new CreateProjectCommand(this.appState, this.projectsController)),
+                new MenuOption("Listar proyectos", new ListProjectsCommand(this.appState,this.projectsController)),
                 new MenuOption("Cerrar sesión", new LogoutCommand(this.appState)),
                 new MenuOption("Salir", new CloseAllCommand())
         );

@@ -35,6 +35,7 @@ public class UsersModel {
                         Roles.valueOf(result.getString("role"))
                 );
             }
+            result.close();
             return loggedUser;
 
         } catch (SQLException e) {
