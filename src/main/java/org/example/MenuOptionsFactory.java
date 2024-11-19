@@ -23,7 +23,7 @@ public class MenuOptionsFactory {
         return List.of(
                 new MenuOption("Iniciar sesión.", new LoginCommand(this.appState, this.usersController)),
                 new MenuOption("Registrarse", new RegisterCommand(this.appState, this.usersController)),
-                new MenuOption("Salir", new CloseCommand())
+                new MenuOption("Salir", new CloseAllCommand())
         );
     }
 
@@ -31,7 +31,7 @@ public class MenuOptionsFactory {
         return List.of(
                 new MenuOption("Crear proyecto", new CreateProjectCommand(this.appState, this.projectsController)),
                 new MenuOption("Cerrar sesión", new LogoutCommand(this.appState)),
-                new MenuOption("Salir", new CloseCommand())
+                new MenuOption("Salir", new CloseAllCommand())
         );
     }
 }

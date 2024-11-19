@@ -1,5 +1,7 @@
 package org.example;
 
+import org.example.commands.CloseAllCommand;
+import org.example.commands.interfaces.MenuCommand;
 import org.example.utils.InputRequester;
 
 import java.util.List;
@@ -59,7 +61,7 @@ public class Menu {
                         """, this.getFormattedTitle(this.title), formattedPromptWithOptions, FOOTER)
             );
 
-            this.menuOptions.get(choice).command().execute(this);
+            this.executeSelectedCommand(choice);
 
             if (this.subMenu != null && this.canOpenSubMenu) this.subMenu.open();
         }
