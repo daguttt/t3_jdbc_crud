@@ -87,6 +87,11 @@ public class Menu {
         return this.parentMenu != null;
     }
 
+    public void reOpenParentMenu() {
+        if (!this.isSubMenu()) throw new RuntimeException("Menu is not a subMenu");
+        this.parentMenu.open();
+    }
+
     private void executeSelectedCommand(int choice) {
         MenuCommand commandToExecute = this.menuOptions.get(choice).command();
         if (this.isSubMenu() && commandToExecute.getClass() == CloseAllCommand.class) {

@@ -14,5 +14,6 @@ public class LogoutCommand implements MenuCommand {
     @Override
     public void execute(Menu menu) {
         appState.setUser(null);
+        menu.close();
     }
 }
