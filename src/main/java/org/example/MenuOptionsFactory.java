@@ -36,6 +36,7 @@ public class MenuOptionsFactory {
                 new MenuOption("Listar proyectos", new ListProjectsCommand(this.appState, this.projectsController)),
                 new MenuOption("Inscribirse en proyecto", new EnrollInProjectCommand(this.appState, this.projectsController, this.inscriptionsController)),
                 new MenuOption("Listar inscripciones", new ListInscriptionsCommand(this.appState, this.inscriptionsController)),
+                new MenuOption("Listar voluntarios de un proyecto", new ListProjectVolunteersCommand(this.appState, this.projectsController, this.inscriptionsController)),
                 new MenuOption("Cerrar sesión", new LogoutCommand(this.appState)),
                 new MenuOption("Salir", new CloseAllCommand())
         );

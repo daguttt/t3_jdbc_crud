@@ -91,4 +91,44 @@ public class InscriptionsModel {
         return inscriptionList.stream().toList();
 
     }
+
+    public List<User> findVolunteers(Project project) {
+        var sql = """
+                SELECT i.user_id, u.name as user_name, u.email as user_email\s
+                FROM inscriptions as i\s
+                INNER JOIN users as u\s
+                ON i.user_id = u.id
+                WHERE i.project_id = ?;
+                """;
+
+        var userList = new ArrayList<User>();
+
+        try (
+                var connection = database.openConnection();
+                var statement = connection.prepareStatement(sql))
+        {
+            statement.setInt(1, project.getId());
+
+            var resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                var userId = resultSet.getInt("user_id");
+                var userName = resultSet.getString("user_name");
+                var userEmail = resultSet.getString("user_email");
+
+                var user = new User();
+                user.setId(userId);
+                user.setName(userName);
+                user.setEmail(userEmail);
+
+                userList.add(user);
+            }
+            resultSet.close();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return userList.stream().toList();
+    }
 }

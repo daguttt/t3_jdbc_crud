@@ -1,6 +1,7 @@
 package org.example.controllers;
 
 import org.example.entities.Inscription;
+import org.example.entities.Project;
 import org.example.entities.User;
 import org.example.models.InscriptionsModel;
 
@@ -19,5 +20,9 @@ public class InscriptionsController {
 
     public List<Inscription> findAll(User user) {
         return this.inscriptionsModel.findAll(user);
+    }
+
+    public List<User> findVolunteers(Project project) {
+        return this.inscriptionsModel.findVolunteers(project);
     }
 }
