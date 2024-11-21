@@ -35,5 +35,7 @@ public class RegisterCommand implements MenuCommand {
         User registeredUser = this.usersController.register(user);
         appState.setUser(registeredUser);
         JOptionPane.showMessageDialog(null, "¡Te has registrado correctamente!");
+
+        menu.close();
     }
 }

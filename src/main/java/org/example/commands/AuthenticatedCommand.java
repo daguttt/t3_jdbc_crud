@@ -4,6 +4,8 @@ import org.example.AppState;
 import org.example.Menu;
 import org.example.commands.interfaces.MenuCommand;
 
+import javax.swing.*;
+
 public abstract class AuthenticatedCommand implements MenuCommand {
     protected final AppState appState;
 
@@ -17,7 +19,7 @@ public abstract class AuthenticatedCommand implements MenuCommand {
 
     public void executeAuthenticated(Menu menu, MenuCommand command) {
         if (!isAuth()) {
-            menu.reOpenParentMenu();
+            JOptionPane.showMessageDialog(null, "Debes estar logueado para realizar esta acción.");
             return;
         }
         command.execute(menu);

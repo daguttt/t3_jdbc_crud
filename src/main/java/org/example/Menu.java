@@ -1,6 +1,5 @@
 package org.example;
 
-import org.example.commands.CloseAllCommand;
 import org.example.commands.interfaces.MenuCommand;
 import org.example.utils.InputRequester;
 
@@ -20,9 +19,6 @@ public class Menu {
     private final String title;
     private final String basePrompt;
     private MenuStatus status;
-    private Menu subMenu;
-    private Menu parentMenu;
-    private boolean canOpenSubMenu;
 
 
     public Menu(List<MenuOption> menuOptions) {
@@ -35,16 +31,9 @@ public class Menu {
         this.title = title;
         this.basePrompt = basePrompt;
         this.status = MenuStatus.CLOSED;
-        this.canOpenSubMenu = true;
-    }
-
-    public void setCanOpenSubMenu(boolean canOpenSubMenu) {
-        this.canOpenSubMenu = canOpenSubMenu;
     }
 
     public void open() {
-        if (this.isSubMenu() && this.parentMenu.isClosed()) return;
-
         this.status = MenuStatus.OPEN;
 
         while (this.status == MenuStatus.OPEN) {
@@ -62,43 +51,17 @@ public class Menu {
             );
 
             this.executeSelectedCommand(choice);
-
-            if (this.subMenu != null && this.canOpenSubMenu) this.subMenu.open();
         }
 
     }
 
     public void close() {
         this.status = MenuStatus.CLOSED;
-        if (this.subMenu != null) this.subMenu.close();
-    }
-
-    public Menu subMenu(Menu subMenu) {
-        this.subMenu = subMenu;
-        this.subMenu.parentMenu = this;
-        return this;
-    }
-
-    public boolean isClosed() {
-        return this.status == MenuStatus.CLOSED;
-    }
-
-    public boolean isSubMenu() {
-        return this.parentMenu != null;
-    }
-
-    public void reOpenParentMenu() {
-        if (!this.isSubMenu()) throw new RuntimeException("Menu is not a subMenu");
-        this.parentMenu.open();
     }
 
     private void executeSelectedCommand(int choice) {
         MenuCommand commandToExecute = this.menuOptions.get(choice).command();
-        if (this.isSubMenu() && commandToExecute.getClass() == CloseAllCommand.class) {
-            commandToExecute.execute(this.parentMenu);
-        } else {
-            commandToExecute.execute(this);
-        }
+        commandToExecute.execute(this);
     }
 
     private String getFormattedTitle(String baseTitle) {

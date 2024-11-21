@@ -51,6 +51,10 @@ public class Main {
         Menu authMenu = new Menu(menuOptionsFactory.getAuthMenuCommands());
         Menu mainMenu = new Menu(menuOptionsFactory.getMainMenuCommands());
 
-        authMenu.subMenu(mainMenu).open();
+        while (appState.getStatus() == AppState.Status.RUNNING) {
+            if (appState.getUser() == null) authMenu.open();
+            if (appState.getStatus() == AppState.Status.RUNNING)
+                mainMenu.open();
+        }
     }
 }

@@ -26,8 +26,6 @@ public class LoginCommand implements MenuCommand {
         User user = new User(email, password);
         User loggedInUser = this.usersController.login(user);
 
-        menu.setCanOpenSubMenu(loggedInUser != null);
-
         if (loggedInUser == null) {
             JOptionPane.showMessageDialog(null, "El correo, la contraseña o ambos son incorrectos.");
             return;
@@ -35,5 +33,7 @@ public class LoginCommand implements MenuCommand {
 
         appState.setUser(loggedInUser);
         JOptionPane.showMessageDialog(null, "¡Has iniciado sesión correctamente!");
+
+        menu.close();
     }
 }
