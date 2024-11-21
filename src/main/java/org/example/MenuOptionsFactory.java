@@ -30,9 +30,18 @@ public class MenuOptionsFactory {
         );
     }
 
-    public List<MenuOption> getMainMenuCommands() {
+    public List<MenuOption> getPublisherMenuCommands() {
         return List.of(
                 new MenuOption("Crear proyecto", new CreateProjectCommand(this.appState, this.projectsController)),
+                new MenuOption("Listar proyectos", new ListProjectsCommand(this.appState, this.projectsController)),
+                new MenuOption("Listar voluntarios de un proyecto", new ListProjectVolunteersCommand(this.appState, this.projectsController, this.inscriptionsController)),
+                new MenuOption("Cerrar sesión", new LogoutCommand(this.appState)),
+                new MenuOption("Salir", new CloseAllCommand(this.appState))
+        );
+    }
+
+    public List<MenuOption> getVolunteerMenuCommands() {
+        return List.of(
                 new MenuOption("Listar proyectos", new ListProjectsCommand(this.appState, this.projectsController)),
                 new MenuOption("Inscribirse en proyecto", new EnrollInProjectCommand(this.appState, this.projectsController, this.inscriptionsController)),
                 new MenuOption("Listar inscripciones", new ListInscriptionsCommand(this.appState, this.inscriptionsController)),

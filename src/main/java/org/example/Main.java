@@ -49,12 +49,16 @@ public class Main {
 
         );
         Menu authMenu = new Menu(menuOptionsFactory.getAuthMenuCommands());
-        Menu mainMenu = new Menu(menuOptionsFactory.getMainMenuCommands());
+        Menu publisherMenu = new Menu(menuOptionsFactory.getPublisherMenuCommands());
+        Menu volunteerMenu = new Menu(menuOptionsFactory.getVolunteerMenuCommands());
 
         while (appState.getStatus() == AppState.Status.RUNNING) {
             if (appState.getUser() == null) authMenu.open();
             if (appState.getStatus() == AppState.Status.RUNNING)
-                mainMenu.open();
+                switch (appState.getUser().getRole()) {
+                    case PUBLISHER -> publisherMenu.open();
+                    case VOLUNTEER -> volunteerMenu.open();
+                }
         }
     }
 }
